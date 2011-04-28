@@ -1,0 +1,22 @@
+<!DOCTYPE HTML> 
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>@tutanxomon</title>
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+	<link rel="stylesheet" type="text/css" href="/style.css" media="all" />
+	<script src="/js/jquery.js"></script>
+	<link href="/js/bubble/jquery.bubblepopup.v2.3.1.css" rel="stylesheet" type="text/css" />
+	<script src="/js/bubble/jquery.bubblepopup.v2.3.1.min.js" type="text/javascript"></script>
+	<script src="/js/script.js"></script>
+</head>
+<body>
+	<header class="no-cell">
+		<h1><strong>Маша,</strong> поздравляем с днём рождения! </h1>
+	</header>
+	<script>
+		var wishes = <?php echo json_encode($wishes); ?>;
+	</script>
+	<span id="console"></span>
+</body>
+</html>
