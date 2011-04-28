@@ -30,13 +30,16 @@ class WishesController {
 	 * действие для нового пожелания
 	 */
 	public function add() {
-		require_once('../application/layouts/layout.phtml');			// рендерим вид
+		$comments = new Axon('wishes');
+		$comments->copyFrom('REQUEST');
+		$comments->save();
+		$this->index();
 	}
 }
 
 $WishesController = new WishesController();
 
 F3::route('GET /', array($WishesController, 'index'));
-F3::route('GET /add', array($WishesController, 'add'));
+F3::route('POST /', array($WishesController, 'add'));
 
 F3::run();

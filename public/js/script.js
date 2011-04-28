@@ -9,10 +9,10 @@ $(document).ready(function(){
 		this.data = data;
 	};
 	
-	Wish.ptototype = {
+	Wish.prototype = {
 		getName : function() { return this.data.name; },
 		getText : function() { return this.data.text; },
-		getPosition : function() { return {x : 10, y : 10} },
+		getPosition : function() { return {x : 10, y : 10}; },
 		getBubbleHtml : function() { return '<strong>' + this.getName() + '</strong><p>' + this.getText() + '</p>'; },
 	}
 	
