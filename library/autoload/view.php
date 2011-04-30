@@ -3,8 +3,8 @@ class View {
 	
 	protected $_path = '';
 	
-	public function __construct($options) {
-		$this->setPath($options['path']);
+	public function __construct() {
+		$this->setPath(F3::get('GUI'));
 	}
 	
 	public function setPath($path) {

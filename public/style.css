@@ -28,7 +28,6 @@ header {
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	padding: 1em 3em;
-	opacity: .8;
 }
 
 h1, h2 {
@@ -58,7 +57,7 @@ h1 strong {
 	top: 2em;
 	right: 2em;
 	background: #222 url(/overlay.png) repeat-x;
-	font: 1.8em Arial, Helvetica, sans-serif;
+	font: 1.6em Arial, Helvetica, sans-serif;
 	padding: .8em 1.6em;
 	color: #fff;
 	text-decoration: none;
@@ -80,6 +79,9 @@ h1 strong {
 
 .green-button {
 	background-color: #91bd09;
+}
+.green-button:hover	 { 
+	background-color: #749a02; 
 }
 
 textarea, input {

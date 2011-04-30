@@ -8,9 +8,10 @@ F3::set('DB', array(													// параметры соединения с �
 					'user' => 'tutanxomon',
 					'password' => 'CzqGeEKDWtfZS8js'
 ));
-
-$view = new View(array('path' => APPLICATION_PATH . '/layouts'));		// инициируем вид
-F3::set('VIEW', $view);													// заносим его в наше хранилище 
+												// заносим его в наше хранилище 
+F3::set('GUI', APPLICATION_PATH . '/layouts/');
+F3::set('E404','e404.htm');
+F3::set('VIEW', new View());
 
 /**
  * Собственно, наш единственный контроллер для пожеланий
@@ -30,9 +31,10 @@ class WishesController {
 	 * действие для нового пожелания
 	 */
 	public function add() {
-		$comments = new Axon('wishes');
-		$comments->copyFrom('REQUEST');
-		$comments->save();
+		$wishesModel = new Axon('wishes');
+		$wishesModel->copyFrom('REQUEST');
+		$wishesModel->save();
+		
 		$this->index();
 	}
 }
