@@ -22,8 +22,9 @@ body {
 
 header {
 	position: absolute;
-	top: 10%;
-	left: 10%;
+	top: 2em;
+	left: 2em;
+	font-size: 1.6em;
 	background: #fff;
 	border: 1px solid #ccc;
 	border-radius: 4px;
@@ -31,7 +32,7 @@ header {
 }
 
 h1, h2 {
-	font-size: 2em;
+	font-size: 1em;
 	font-family: Georgia;
 	font-style: italic;
 }
@@ -100,4 +101,14 @@ input {
 textarea {
 	width: 85%;
 	height: 100px;
+}
+#terminal {
+	position: absolute;
+	z-index: 1000;
+	bottom: 0;
+	height: 700px;
+	ovreflow: scroll;
+	width: 600px;
+	right: 0;
+	display: none;
 }
