@@ -9,9 +9,13 @@ F3::set('DB', array(													// параметры соединения с �
 					'password' => 'CzqGeEKDWtfZS8js'
 ));
 												// заносим его в наше хранилище 
-F3::set('GUI', APPLICATION_PATH . '/layouts/');
-F3::set('E404','e404.htm');
+F3::set('GUI', APPLICATION_PATH . '/views/');
+//F3::set('E404','e404.htm');
 F3::set('VIEW', new View());
+
+function isAjax() {
+	return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'));
+}
 
 /**
  * Собственно, наш единственный контроллер для пожеланий
@@ -37,11 +41,17 @@ class WishesController {
 		
 		$this->index();
 	}
+	
+	public function rpc() {
+		include_once '../library/terminal/json-rpc.php';
+		handle_json_rpc(new Terminal());
+	}
 }
 
 $WishesController = new WishesController();
 
 F3::route('GET /', array($WishesController, 'index'));
 F3::route('POST /', array($WishesController, 'add'));
+F3::route('POST /rpc', array($WishesController, 'rpc'));
 
 F3::run();
