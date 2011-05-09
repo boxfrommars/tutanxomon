@@ -184,7 +184,6 @@ $(document).ready(function(){
 			.data(data)
 			.css({'top' : cellSize.height * coords.y, 'left' : cellSize.width * coords.x}) // коорд. есть, размер клетки есть, добавляем
 			.appendTo($field);
-
 		deadFields.push({
 			'left' : coords.x,
 			'right' : coords.x,
@@ -202,7 +201,8 @@ $(document).ready(function(){
 			$('#waiter').html('');
 		},
 		'addError' : function(text){
-			$('#waiter').html('<span class="error">произошла ошибка, попробуйте чуть позже :(</span>');
+			text = (null == text) ? 'произошла ошибка, попробуйте чуть позже :(' : text;
+			$('#waiter').html('<span class="error">' + text + '</span>');
 		}
 	};
 	
@@ -226,8 +226,13 @@ $(document).ready(function(){
 		var $form = $(this);
 		$form.find('#position').val(~~(Math.random() * blocks.total));
 		var data = $form.serialize();
+		var url = '/add';
+		// немного фигни для ie, чтобы не кешировал
+		var d = new Date();
+		url += '?t=' + d.getTime();
+		
 		$.ajax({
-			'url' : '/add',
+			'url' : url,
 			'type' : 'post',
 			'dataType' : 'json',
 			'data' : data,
@@ -241,6 +246,8 @@ $(document).ready(function(){
 					$('#add-wish').trigger('reveal:close');
 					$wish.fadeOut().fadeIn().fadeOut().fadeIn().fadeOut().fadeIn().fadeOut().fadeIn();
 					$wish.ShowBubblePopup();
+				} else {
+					waiter.addError('проверьте правильность всех полей');
 				}
 			},
 			'error' : function(response) {
