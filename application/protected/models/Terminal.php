@@ -52,8 +52,7 @@ class Terminal {
 	
 	public function delete($token, $id) {
 		if ($this->_checkToken($token)) {
-			
-			$wishes = Wish::model()->findAll();
+			Wish::model()->deleteByPk($id);
 			return 'wish with id #' . (int) $id . ' was deleted, reload page to see thats TRUE :)';
 		} else {
 			throw new Exception("Access Denied");
