@@ -23,6 +23,7 @@ $(document).ready(function(){
 		
 	$('#show-wishes').live('click', function(){
 		$('#wish-list-block').reveal();
+		return false;
 	});
 	// настройки счётчика символов в поле 
 	characterCountOptions = {
