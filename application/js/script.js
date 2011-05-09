@@ -194,6 +194,18 @@ $(document).ready(function(){
 		return $cell;
 	}
 	
+	var waiter = {
+		'on' : function () {
+			$('#waiter').html('<span class="info">подождите...</span>')
+		},
+		'off' : function(){
+			$('#waiter').html('');
+		},
+		'addError' : function(text){
+			$('#waiter').html('<span class="error">произошла ошибка, попробуйте чуть позже :(</span>');
+		}
+	};
+	
 	addCopyright();
 	
 	// пробегаемся по всем поздравлениям (они уже должны присутствовать в теле страницы в виде объекта)
@@ -204,14 +216,16 @@ $(document).ready(function(){
 			addWish(wish);
 		});
 	} 
-
+	
 	// навешиваем обработчик на отправку форму:
 	// добавляем позицию пожелания, отправляем данные аяксом, получаем обыкновенный объект с пожеланием
 	// преобразовываем в Wish-объект, добавляем его, закрываем форму, 
 	// показываем новодобавленное пожелание и мерцаем его клеткой 
 	$('#add-wish-form').submit(function(){
-		$(this).find('#position').val(~~(Math.random() * blocks.total));
-		var data = $(this).serialize();
+		waiter.on();
+		var $form = $(this);
+		$form.find('#position').val(~~(Math.random() * blocks.total));
+		var data = $form.serialize();
 		$.ajax({
 			'url' : '/add',
 			'type' : 'post',
@@ -219,6 +233,8 @@ $(document).ready(function(){
 			'data' : data,
 			'success' : function(response) {  // должен приходить в формате {'success' : true, wish : {данные}}
 				if (response.success) {
+					waiter.off();
+					$form[0].reset();
 					$wish = addWish(new Wish(response.wish));
 					// паренёк, который разработал reveal говорит, что сделает метод, который будет закрывать окно пограммно в след. версии,
 					// пока я нашёл такой выход (в любом случае он будет оборачивать именно этот триггер)
@@ -226,6 +242,9 @@ $(document).ready(function(){
 					$wish.fadeOut().fadeIn().fadeOut().fadeIn().fadeOut().fadeIn().fadeOut().fadeIn();
 					$wish.ShowBubblePopup();
 				}
+			},
+			'error' : function(response) {
+				waiter.addError();
 			}
 		});
 		return false;

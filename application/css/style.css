@@ -132,3 +132,10 @@ textarea {
 	right: 0;
 	display: none;
 }
+#waiter {
+	font-family: sans-serif;
+	color: #91bd09;
+}
+#waiter .error {
+	color: red;	
+}

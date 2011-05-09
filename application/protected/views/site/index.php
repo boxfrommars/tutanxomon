@@ -14,7 +14,7 @@
 			<label for="wish[text]">Поздравление:</label><br />
 			<textarea name="wish[text]"></textarea><br />
 			<input type="hidden" name="wish[position]" id="position" value="24" />
-			<input type="submit" name="submit" value="поздравить">
+			<input type="submit" name="submit" value="поздравить">&nbsp;&nbsp;&nbsp;<span id="waiter"></span>
 		</form>
 		<a class="close-reveal-modal">&#215;</a>
 	</div>
