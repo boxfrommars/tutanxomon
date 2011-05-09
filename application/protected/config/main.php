@@ -1,5 +1,11 @@
 <?php
 return array(
+	'params' => array(
+		'rpcAdmin' => array(
+			'user' => 'worksterdam',
+			'password' => 'weareworking'
+		)
+	),
 	'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
 	'name' => 'Tutanxomon',
 	'preload' => array('log'),
