@@ -2,7 +2,7 @@
 class Terminal {
 	
 	protected function _auth($user, $passwd) {
-		if (strcmp($user, 'worksterdam') == 0 && strcmp($passwd, 'weareworking') == 0) {
+		if (strcmp($user, Yii::app()->params->rpcAdmin['user']) == 0 && strcmp($passwd, Yii::app()->params->rpcAdmin['password']) == 0) {
 			return md5($user . ":" . $passwd);
 		} else {
 			throw new Exception("Wrong Password");
@@ -10,7 +10,7 @@ class Terminal {
 	}
 	
 	protected function _checkToken($token) {
-		return (strcmp(md5("worksterdam:weareworking"), $token) == 0);
+		return (strcmp(md5(Yii::app()->params->rpcAdmin['user'] . ":" . Yii::app()->params->rpcAdmin['password']), $token) == 0);
 	}
 	
 	static $login_documentation = "login to the server (return token)";
