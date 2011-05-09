@@ -1,11 +1,9 @@
 <?php
-
-class SiteController extends CController
-{
+class SiteController extends CController {
 	
 	public function actionIndex() {
 		$this->render('index', array(
-			'wishes' => $this->_prepareToJSON(Wish::model()->findAll())
+			'wishes' => Wish::model()->findAll(array('order' => 'id'))
 		));
 	}
 	
@@ -14,11 +12,17 @@ class SiteController extends CController
 			$wish = new Wish();
 			$wish->setAttributes($_POST['wish']);
 			if($wish->save()) {
-				echo json_encode(array('success' => true, 'wish' => $wish->attributes));
+				echo CJSON::encode(array('success' => true, 'wish' => $wish));
 				return;
 			}
 		}
-		echo json_encode(array('success' => false));
+		echo CJSON::encode(array('success' => false));
+	}
+	
+	public function actionAdmin() {
+		$this->render('admin', array(
+			'wishes' => Wish::model()->findAll()
+		));
 	}
 	
 	public function actionRpc() {
@@ -26,30 +30,12 @@ class SiteController extends CController
 		handle_json_rpc(new Terminal());
 	}
 	
-	public function actionAdmin() {
-		$this->render('admin', array(
-			'wishes' => $this->_prepareToJSON(Wish::model()->findAll())
-		));
-	}
-	
-	protected function _prepareToJSON($arrayOfActiveRecords){
-		$arrayOfArrays = array();
-		foreach ($arrayOfActiveRecords as $activeRecord) {
-			$arrayOfArrays[] = $activeRecord->getAttributes();	
-		}
-		return $arrayOfArrays;
-	}
-	
-	/**
-	 * This is the action to handle external exceptions.
-	 */
 	public function actionError() {
-	    if($error=Yii::app()->errorHandler->error)
-	    {
-	    	if(Yii::app()->request->isAjaxRequest)
+	    if($error=Yii::app()->errorHandler->error) {
+	    	if(Yii::app()->request->isAjaxRequest) 
 	    		echo $error['message'];
-	    	else
-	        	$this->render('error', $error);
+	    	else 
+	    		$this->render('error', $error);
 	    }
 	}
 }

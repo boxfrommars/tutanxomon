@@ -28,6 +28,11 @@
 		</footer>
 		<a class="close-reveal-modal">&#215;</a>
 	</div>
+	<div id="wish-list-block" class="reveal-modal">
+		<h2>Всего 25 поздравлений:</h2>
+		<div id="wish-list"></div>
+		<a class="close-reveal-modal">&#215;</a>
+	</div>
 	<div id="terminal"></div>
 </body>
 </html>

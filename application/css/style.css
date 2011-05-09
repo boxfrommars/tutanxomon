@@ -1,4 +1,4 @@
-html, body, header, footer, div, h1, h2, p {
+html, body, header, footer, div, h1, h2, p, table, td, tr {
 	margin: 0;
 	padding: 0;
 	font-weight: normal;
@@ -23,7 +23,7 @@ header {
 	position: absolute;
 	top: 2em;
 	left: 2em;
-	font-size: 1.6em;
+	font-size: 1em;
 	background: #fff;
 	border: 1px solid #ccc;
 	border-radius: 4px;
@@ -31,14 +31,23 @@ header {
 }
 
 h1, h2 {
-	font-size: 1em;
 	font-family: Georgia;
 	font-style: italic;
 }
+h1 {
+	font-size: 1.6em;
+}
 h2 {
 	font-size: 1.5em;
-	margin-bottom: 1.5em;
+	margin-bottom: 1em;
 }
+
+header h2 {
+	margin: 0;
+	font-size: 1.3em;
+	font-style: normal;
+}
+
 
 h1 strong {
 	font-size: 1.4em;
@@ -117,6 +126,9 @@ footer {
 input {
 	width: 40%;
 }
+#wish-submit {
+	width: 150px;
+}
 .submit:hover {
 	background: #fafafa;
 }
@@ -129,15 +141,42 @@ textarea {
 	z-index: 1000;
 	bottom: 0;
 	height: 600px;
-	ovreflow: scroll;
+	overflow: auto;
 	width: 600px;
 	right: 0;
 	display: none;
 }
-#waiter {
+
+#informer {
 	font-family: sans-serif;
+	color: #777;
+}
+#informer .error {
+	color: red;	
+}
+#informer .success {
 	color: #91bd09;
 }
-#waiter .error {
-	color: red;	
+#informer .warning {
+	color: #600;;
+}
+#wish-list {
+	height: 500px;
+	overflow-y: scroll;
+	padding: 1em 2em 1em 1em;
+	border: 1px solid #ccc;
+}
+#wish-list .wish-id {
+	color: #bbb;
+}
+#wish-list strong {
+	color: #91bd09;
+}
+#wish-list div {
+	padding-bottom: 2em;
+}
+
+
+.jquerybubblepopup-top-left, .jquerybubblepopup-top-right, .jquerybubblepopup-top-middle {
+	font-size: 0;
 }

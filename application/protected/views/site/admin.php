@@ -3,7 +3,7 @@
 		<h1>Если ты здесь, ты знаешь, что делать :)</h1>
 	</header>
 	<script>
-		var wishes = <?php echo json_encode($wishes); ?>;
+		var wishes = <?php echo CJSON::encode($wishes); ?>;
 	</script>
 	<script type="text/javascript" src="/js/terminal/jquery.terminal-0.3.4.min.js"></script>
 	

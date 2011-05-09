@@ -2,8 +2,37 @@ document.createElement('header');
 document.createElement('footer');
 
 $(document).ready(function(){
-	// настройки
-	var $field = $('body'); // в нашем случае, поле -- весь body, по хорошему, если всё правильно, то можно и любой блок пользовать
+	
+	// немного спагетти для затравочки (добавляем субхедер со ссылкой на модальное окно-список
+	// со всеми пожеланиями
+	var $subHeader = $('<h2>').appendTo('header');
+	var refreshWishCounters = function(){
+		var count = wishes.length;
+		
+		var subHeaderText = 'и дарим тебе <a href="#" id="show-wishes">' + count + ' ';
+			subHeaderText += pluralizeWord(count, ['замечательного', 'замечательных', 'замечательных']) + ' '
+			subHeaderText += pluralizeWord(count, ['единорога', 'единорогов', 'единорогов']) + '</a>';
+		
+		$subHeader.html(subHeaderText);
+		
+		var wishListHeaderText = 'Всего ' + count + ' ' + pluralizeWord(count, ['поздравление', 'поздравления', 'поздравлений']) + ':';
+		$('#wish-list-block h2').html(wishListHeaderText);
+	}
+	
+	refreshWishCounters();
+		
+	$('#show-wishes').live('click', function(){
+		$('#wish-list-block').reveal();
+	});
+	// настройки счётчика символов в поле 
+	characterCountOptions = {
+			'elm' : '#add-wish-form textarea', // селектор текстового поля, в котором считаем символы
+			'allowed' : 300, // максимальное количество символов в пожелании не забываем менять и в php (модель Wish)
+			'warning' : 25,  // когда останется столько возможных символов, это уже варнинг
+		}
+	
+	// настройки нашей сетки с поздравлениями
+	var $field = $('body'); // в нашем случае весь body, по хорошему, если всё правильно, то можно и любой блок пользовать
 	var cellSize = { 'width' : 34, 'height' : 23 };	// ширина картинки единорога
 	var blocks = {'width' : 7, 'height' : 4} 		// на сколько блоков делим поле
 	
@@ -64,8 +93,8 @@ $(document).ready(function(){
 	
 	/**
 	 * определяем, попадает ли клетка с заданными координатами в "мёртвый блок"
-//	 * 
-//	 * @param object coord {x : int, y : int}. x,y -- координаты клетки в клетках 
+	 * 
+	 * @param object coord {x : int, y : int}. x,y -- координаты клетки в клетках 
 	 * @return bool inDead
 	 */
 	var inDeadFields = function(coord) {
@@ -82,7 +111,7 @@ $(document).ready(function(){
 	/**
 	 * проверяем, можем ли мы добавить в данную координату клетку (пока только проверка на deadFields)
 	 * 
-//	 * @param object coord {x : int, y : int}. x,y -- координаты клетки в клетках 
+	 * @param object coord {x : int, y : int}. x,y -- координаты клетки в клетках 
 	 * @return bool isCorrect
 	 */
 	var isCorrectCell = function(coord) {
@@ -123,15 +152,48 @@ $(document).ready(function(){
 	 */
 	var addPopup = function($cell) {
 		var offset = $cell.offset();
+		offset.right = fieldSize.width - offset.left;
+		$.extend(offset, {
+			'right' : fieldSize.width - (offset.left + cellSize.width),
+			'bottom' : fieldSize.height - (offset.top + cellSize.height)
+		});
 		var bubbleWidth = 400;
-		var position = (fieldSize.width - offset.left) < bubbleWidth ? 'left' : 'right';
-		var align = (offset.top <= 2 * cellSize.height) ? 'top' : 'center';
-		align = (fieldSize.height - offset.top) <= 2 * cellSize.height ? 'bottom' : align;
+		
+		// тут надо ещё немного подумать, вв углах выглядит не очень и есть способы улучшить
+		var vMax = 4 * cellSize.height;
+		var hMax = 6 * cellSize.width;
+		
+		var position = 'right', align = 'center';
+		
+		// верхняя часть экрана
+		if (offset.top <= vMax) {
+			// если при этом не углы -- просто показываем пожелание снизу
+			if (offset.left >= hMax && offset.right >= hMax) {
+				position = 'bottom';
+			} else {   // а вот если углы, то будет смотреться немного криво
+				align = 'top';
+			}
+		}
+		
+		// нижняя часть экрана
+		if (offset.bottom <= vMax) {
+			// если при этом не углы -- просто показываем пожелание снизу
+			if (offset.left >= hMax && offset.right >= hMax) {
+				position = 'top';
+			} else {   // а вот если углы, то будет смотреться немного криво
+				align = 'bottom';
+			}
+		}
+		var position = (offset.right < bubbleWidth && ((position !== 'bottom') && position !== 'top')) ? 'left' : position;
+		
+//		var position = (fieldSize.width - offset.left) < bubbleWidth ? 'left' : 'right';
+//		var align = (offset.top <= 4 * cellSize.height) ? 'top' : 'center';
+//		align = (fieldSize.height - offset.top) <= 4 * cellSize.height ? 'bottom' : align;
 		$cell.CreateBubblePopup({
 			'position' : position,
 			'align'	 : align,
 			'innerHtml': $cell.data('wish').getBubbleHtml(),
-			'innerHtmlStyle' : {'text-align' : 'left', 'font-size': '1.1em'},
+			'innerHtmlStyle' : {'text-align' : 'left', 'font-size' : '1.1em', 'overflow' : 'hide', 'max-width' : bubbleWidth + 'px'},
 			'themeName' : 	'all-azure',
 			'themePath' : 	'/js/bubble/themes',
 			'alwaysVisible' : false,
@@ -149,6 +211,7 @@ $(document).ready(function(){
 	var addWish = function(wish) {
 		var wishCoords = findWishCoords(wish); // находим координату нашего пожелания (в клетках от лв-угла поля)
 		$wish = addCell(wishCoords, {'wish' : wish}, 'cell');
+		$('#wish-list').append('<div>' + wish.getBubbleHtml() + '</div>');
 		addPopup($wish);
 		return $wish;
 	}
@@ -193,16 +256,14 @@ $(document).ready(function(){
 		return $cell;
 	}
 	
-	var waiter = {
-		'on' : function () {
-			$('#waiter').html('<span class="info">подождите...</span>')
+	var informer = {
+		'elm' : $('#informer'),
+		'add' : function(html, type) {
+			type = (null == type) ? 'info' : type;
+			informer.elm.html($('<span>').addClass(type).html(html));
 		},
-		'off' : function(){
-			$('#waiter').html('');
-		},
-		'addError' : function(text){
-			text = (null == text) ? 'произошла ошибка, попробуйте чуть позже :(' : text;
-			$('#waiter').html('<span class="error">' + text + '</span>');
+		'clear' : function(){
+			informer.elm.html('')
 		}
 	};
 	
@@ -216,16 +277,44 @@ $(document).ready(function(){
 			addWish(wish);
 		});
 	} 
-	
+
+	// навешиваем на текст поздравления счётчик символов
+	(function(options){
+		var $elm = $(options.elm);
+		if ($elm.length > 0) {
+			var calculateChars = function($elm) {
+				var count = $elm.val().length;
+				var available = options.allowed - count;
+				
+				var informerType = (available <= options.warning) ? 'warning' : 'info';
+				informerType = (available < 0) ? 'error' :  informerType;
+				
+				informer.add(available, informerType)
+			}
+			
+			calculateChars($elm);
+			$elm.keyup(function(){ calculateChars($elm)} );
+			$elm.change(function(){ calculateChars($elm)} );
+		}
+	})(characterCountOptions);
 	// навешиваем обработчик на отправку форму:
 	// добавляем позицию пожелания, отправляем данные аяксом, получаем обыкновенный объект с пожеланием
 	// преобразовываем в Wish-объект, добавляем его, закрываем форму, 
 	// показываем новодобавленное пожелание и мерцаем его клеткой 
 	$('#add-wish-form').submit(function(){
-		waiter.on();
 		var $form = $(this);
+		
+		// если сообщение длиннее чем допустимо -- предупреждаем и не сохраняем
+		if ($form.find('textarea').val().length > characterCountOptions.allowed) {
+			informer.add('Ошибка: текст больше ' + characterCountOptions.allowed + ' символов', 'error');
+			return false
+		}
+		
+		informer.add('Подождите...', 'info');
+		
 		$form.find('#position').val(~~(Math.random() * blocks.total));
 		var data = $form.serialize();
+		
 		var url = '/add';
 		// немного фигни для ie, чтобы не кешировал
 		var d = new Date();
@@ -238,22 +327,51 @@ $(document).ready(function(){
 			'data' : data,
 			'success' : function(response) {  // должен приходить в формате {'success' : true, wish : {данные}}
 				if (response.success) {
-					waiter.off();
+					informer.clear();
 					$form[0].reset();
 					$wish = addWish(new Wish(response.wish));
+					wishes.push(response.wish);
 					// паренёк, который разработал reveal говорит, что сделает метод, который будет закрывать окно пограммно в след. версии,
 					// пока я нашёл такой выход (в любом случае он будет оборачивать именно этот триггер)
 					$('#add-wish').trigger('reveal:close');
 					$wish.fadeOut().fadeIn().fadeOut().fadeIn().fadeOut().fadeIn().fadeOut().fadeIn();
 					$wish.ShowBubblePopup();
+					refreshWishCounters();
 				} else {
-					waiter.addError('проверьте правильность всех полей');
+					informer.add('Проверьте правильность всех полей', 'error');
 				}
 			},
 			'error' : function(response) {
-				waiter.addError();
+				informer.add('Что-то пошло не так, попробуйте позже', 'error');
 			}
 		});
 		return false;
 	});
 });
+
+/**
+ * Функция возвращает окончание для множественного числа слова на основании числа и массива окончаний
+ * 
+ * @param  iNumber Integer Число на основе которого нужно сформировать окончание
+ * @param  aEndings Array Массив слов или окончаний для чисел (1, 4, 5), например ['яблоко', 'яблока', 'яблок']
+ * @return String
+ */
+function pluralizeWord(iNumber, aEndings)
+{
+	var sEnding, i;
+	iNumber = iNumber % 100;
+	if (iNumber>=11 && iNumber<=19) {
+		sEnding=aEndings[2];
+	}
+	else {
+		i = iNumber % 10;
+		switch (i) {
+			case (1): sEnding = aEndings[0]; break;
+			case (2):
+			case (3):
+			case (4): sEnding = aEndings[1]; break;
+			default: sEnding = aEndings[2];
+		}
+	}
+	return sEnding;
+}

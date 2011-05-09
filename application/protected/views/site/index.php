@@ -4,7 +4,7 @@
 	</header>
 	<a href="#" data-reveal-id="add-wish" class="button green-button no-cell">Подарить единорога</a>
 	<script>
-		var wishes = <?php echo json_encode($wishes); ?>;
+		var wishes = <?php echo CJSON::encode($wishes); ?>;
 	</script>
 	<div id="add-wish" class="reveal-modal">
 		<h2>Поздравить Машу:</h2>
@@ -14,7 +14,7 @@
 			<label for="wish[text]">Поздравление:</label><br />
 			<textarea name="wish[text]"></textarea><br />
 			<input type="hidden" name="wish[position]" id="position" value="24" />
-			<input type="submit" name="submit" class="submit" value="поздравить">&nbsp;&nbsp;&nbsp;<span id="waiter"></span>
+			<input type="submit" name="submit" class="submit" id="wish-submit" value="поздравить">&nbsp;&nbsp;&nbsp;<span id="informer"></span>
 		</form>
 		<a class="close-reveal-modal">&#215;</a>
 	</div>
