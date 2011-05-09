@@ -3,7 +3,7 @@ document.createElement('footer');
 
 $(document).ready(function(){
 	
-	// немного спагетти для затравочки (добавляем субхедер со ссылкой на модальное окно-список
+	// добавляем субхедер со ссылкой на модальное окно-список
 	// со всеми пожеланиями
 	var $subHeader = $('<h2>').appendTo('header');
 	var refreshWishCounters = function(){
@@ -185,7 +185,7 @@ $(document).ready(function(){
 				align = 'bottom';
 			}
 		}
-		var position = (offset.right < bubbleWidth && ((position !== 'bottom') && position !== 'top')) ? 'left' : position;
+		var position = (offset.right < bubbleWidth && ((position !== 'bottom') && (position !== 'top'))) ? 'left' : position;
 		
 //		var position = (fieldSize.width - offset.left) < bubbleWidth ? 'left' : 'right';
 //		var align = (offset.top <= 4 * cellSize.height) ? 'top' : 'center';

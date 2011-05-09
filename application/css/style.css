@@ -121,7 +121,7 @@ footer {
 	width: 100%;
 	overflow: hidden;
 	display: block;
-	padding-top: 2em;
+	padding-top: 1.5em;
 }
 input {
 	width: 40%;
@@ -161,7 +161,7 @@ textarea {
 	color: #600;;
 }
 #wish-list {
-	height: 500px;
+	height: 400px;
 	overflow-y: scroll;
 	padding: 1em 2em 1em 1em;
 	border: 1px solid #ccc;
@@ -175,8 +175,6 @@ textarea {
 #wish-list div {
 	padding-bottom: 2em;
 }
-
-
 .jquerybubblepopup-top-left, .jquerybubblepopup-top-right, .jquerybubblepopup-top-middle {
 	font-size: 0;
 }
