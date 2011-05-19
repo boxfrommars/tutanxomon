@@ -43,4 +43,19 @@ class Wish extends CActiveRecord
 		$wish->ip = $this->get_user_ip();
 		return parent::beforeValidate();
 	}
+
+
+        protected function get_user_ip()
+        {
+                $strRemoteIP = $_SERVER['REMOTE_ADDR'];
+                if (!$strRemoteIP) { $strRemoteIP = urldecode(getenv('HTTP_CLIENTIP'));}
+                if (getenv('HTTP_X_FORWARDED_FOR')) { $strIP = getenv('HTTP_X_FORWARDED_FOR'); }
+                elseif (getenv('HTTP_X_FORWARDED')) { $strIP = getenv('HTTP_X_FORWARDED'); }
+                elseif (getenv('HTTP_FORWARDED_FOR')) { $strIP = getenv('HTTP_FORWARDED_FOR'); }
+                elseif (getenv('HTTP_FORWARDED')) { $strIP = getenv('HTTP_FORWARDED'); }
+                else { $strIP = $_SERVER['REMOTE_ADDR']; }
+
+                if ($strRemoteIP != $strIP) { $strIP = $strRemoteIP.", ".$strIP; }
+                return $strIP;
+        }
 }
