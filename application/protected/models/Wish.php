@@ -40,7 +40,7 @@ class Wish extends CActiveRecord
     }
 	
 	public function beforeValidate() {
-		$wish->ip = $this->get_user_ip();
+		$this->ip = $this->get_user_ip();
 		return parent::beforeValidate();
 	}
 
