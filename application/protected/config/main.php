@@ -21,6 +21,11 @@ return array(
 			'charset' => 'UTF8',
 			'emulatePrepare' => true,
 		),
+		'ipblocker' => array(
+			'class' => 'application.components.IPBlocker',
+			'sendEmail' => 'maxnebo@gmail.com', //кому отсылать мылы и забаненности
+			'errorText' => 'Internal Server Error',
+		),
 		'urlManager' => array(
 			'urlFormat' => 'path',
 			'rules' => array(
