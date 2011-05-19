@@ -8,7 +8,7 @@ class SiteController extends CController {
 	}
 	
 	public function actionAdd() {
-		if (!empty($_POST['wish'])){
+		if (!empty($_POST['wish']) && $this->validateCom()){
 			$wish = new Wish();
 			$wish->setAttributes($_POST['wish']);
 			if($wish->save()) {
@@ -28,6 +28,11 @@ class SiteController extends CController {
 	public function actionRpc() {
 		include_once Yii::app()->basePath . '/vendors/terminal/json-rpc.php';
 		handle_json_rpc(new Terminal());
+	}
+	
+	public function validateCom() {
+		$name = $_POST['name'];
+		return ((mb_strpos($_POST['name'], 'Тиреч') === false) && (mb_strpos($_POST['name'], 'Tirech') === false));
 	}
 	
 	public function actionError() {

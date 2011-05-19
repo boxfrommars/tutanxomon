@@ -40,7 +40,7 @@ class Wish extends CActiveRecord
     }
 	
 	public function beforeValidate() {
-		$this->text = mb_substr($this->text, 0, self::MAX_TEXT_SIZE);
+		$wish->ip = $this->get_user_ip();
 		return parent::beforeValidate();
 	}
 }

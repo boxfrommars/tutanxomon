@@ -3,15 +3,15 @@ document.createElement('footer');
 
 $(document).ready(function(){
 	
-	// добавляем субхедер со ссылкой на модальное окно-список
+	// немного спагетти для затравочки (добавляем субхедер со ссылкой на модальное окно-список
 	// со всеми пожеланиями
 	var $subHeader = $('<h2>').appendTo('header');
 	var refreshWishCounters = function(){
 		var count = wishes.length;
 		
-		var subHeaderText = 'и дарим тебе <a href="#" id="show-wishes">' + count + ' ';
+		var subHeaderText = '<em>И дарим тебе ';
 			subHeaderText += pluralizeWord(count, ['замечательного', 'замечательных', 'замечательных']) + ' '
-			subHeaderText += pluralizeWord(count, ['единорога', 'единорогов', 'единорогов']) + '</a>';
+			subHeaderText += pluralizeWord(count, ['единорога', 'единорогов', 'единорогов']) + ' ;)</em>';
 		
 		$subHeader.html(subHeaderText);
 		
@@ -28,7 +28,7 @@ $(document).ready(function(){
 	// настройки счётчика символов в поле 
 	characterCountOptions = {
 			'elm' : '#add-wish-form textarea', // селектор текстового поля, в котором считаем символы
-			'allowed' : 300, // максимальное количество символов в пожелании не забываем менять и в php (модель Wish)
+			'allowed' : 200, // максимальное количество символов в пожелании не забываем менять и в php (модель Wish)
 			'warning' : 25,  // когда останется столько возможных символов, это уже варнинг
 		}
 	
@@ -185,7 +185,7 @@ $(document).ready(function(){
 				align = 'bottom';
 			}
 		}
-		var position = (offset.right < bubbleWidth && ((position !== 'bottom') && (position !== 'top'))) ? 'left' : position;
+		var position = (offset.right < bubbleWidth && ((position !== 'bottom') && position !== 'top')) ? 'left' : position;
 		
 //		var position = (fieldSize.width - offset.left) < bubbleWidth ? 'left' : 'right';
 //		var align = (offset.top <= 4 * cellSize.height) ? 'top' : 'center';
